@@ -49,6 +49,7 @@ int main(int argc, char** argv) {
 
     char usuario[100];
     char secreto[100];
+
     fscanf(fd, "%s %s", usuario, secreto);
     
     // Enviar y recibir mensajes con el servidor, haciendo uso de streams
@@ -132,9 +133,6 @@ int main(int argc, char** argv) {
         }
         if (opcion == 3){
             exit(0);
-        }
-        else{
-            printf("Opcion no valida\n");
         }
     }
     return 0;
