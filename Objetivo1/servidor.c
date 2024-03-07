@@ -6,6 +6,12 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+
 
 int main(int argc, char* argv[]){
 
@@ -33,21 +39,20 @@ int main(int argc, char* argv[]){
         perror("[!] ERROR: no se ha podido abrir el socket\n");
         exit(-1);
     }
-    
-    if (connect(sock, (struct sockaddr*)&servidor, sizeof(servidor)) < 0) {
-        perror("No se pudo conectar al servidor");
+
+    if(accept(sock, (struct sockaddr*)&servidor, sizeof(servidor)) < 0){
+        perror("No se pudo aceptar la conexión");
         exit(-1);
     }
 
-    // if (bind(sock, (struct sockaddr *)&servidor, sizeof(servidor)) == -1) {
-    //     perror ("\nERROR, no se pudo coger el puerto correctamente\n");
-    //     exit(-1);
-    // }
+    if (bind(sock, (struct sockaddr *)&servidor, sizeof(servidor)) == -1) {
+        perror ("\nERROR, no se pudo coger el puerto correctamente\n");
+        exit(-1);
+    }
 
-    // if(listen(sock, 5) == -1){ //Espera a una conexión
-    //     perror("Error en listen");
-    //     exit(-1);
-    // }
+    if(listen(sock, 5) == -1){ //Espera a una conexión
+        perror("Error en listen");
+        exit(-1);
+    }
 
-    sleep(10);
 }
