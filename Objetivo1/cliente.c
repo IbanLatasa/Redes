@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     fscanf(fd, "%s %s", usuario, secreto);
     
     // Enviar y recibir mensajes con el servidor, haciendo uso de streams
-    FILE* f = fdopen(sock1, "r+");
+    FILE* f = fdopen(sock1, "r+"); //Le doy permisos de lectura y escritura
     setbuf(f, NULL);
 
     // Enviar mensaje al servidor "LOGIN <usuario>"
@@ -61,7 +61,6 @@ int main(int argc, char** argv) {
     sprintf(mensaje, "LOGIN %s\n", usuario);
     fprintf(f, "%s", mensaje);
     printf("%s", mensaje);
-    fflush(f);
 
 
     // Recibir mensaje del servidor
@@ -95,9 +94,13 @@ int main(int argc, char** argv) {
         printf("%s\n", buffer);
         
         if (strcmp(buffer, "PROTO ERROR") == 0){ // Si el servidor responde con PROTO ERROR, se cierra la conexión
+            fclose(f);
             exit(-1);
         }
         if (strcmp(buffer, "LOGIN OK") == 0){ // Si el servidor responde con LOGIN OK, se cierra la conexión
+            fclose(f);
+            close(sock1);
+            fclose(fd);
             printf("Autenticado OK\n");
         }
 
@@ -135,5 +138,7 @@ int main(int argc, char** argv) {
             exit(0);
         }
     }
+    
+    
     return 0;
 }
